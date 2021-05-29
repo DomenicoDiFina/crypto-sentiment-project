@@ -288,21 +288,23 @@ def pre_processing(tweets):
     # tokenization : In this each entry will be broken into set of words
     tweets_tokenized = tokenization(tweets)
 
+    pre_processed_tweets = list()
     # Remove stop words
-    pre_processed_tweets = stop_words(tweets_tokenized)
+    for tweet in tweets_tokenized:
+        pre_processed_tweets.append(stop_words(tweet))
 
 
 
-    return original_tweets, pre_processed_tweets
+    return pre_processed_tweets
 
 def tokenization(tweets):
     tweets_tokenized = [word_tokenize(tweet) for tweet in tweets]
 
     return tweets_tokenized
 
-def stop_words(tweets):
+def stop_words(tweet):
     stop = stopwords.words('english')
-    tweets_tokenized = [i for i in tweets if i not in stop]
+    tweets_tokenized = [word for word in tweet if word not in stop]
 
     return tweets_tokenized
 
@@ -419,5 +421,5 @@ def process_tweet(tweet):
 
 
 # if __name__ == '__main__':
-#     _, result = pre_processing(["don't do that, call me asap, 5$ https://ciao.com"])
+#     result = pre_processing(["don't do that, call me asap, 5$ https://ciao.com", "the film was good"])
 #     print(result)
