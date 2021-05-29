@@ -1,13 +1,10 @@
 import re
-import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem.lancaster import LancasterStemmer
 import pickle
 from langdetect import detect
 #import snoop
-
-nltk.download('punkt')
 
 def pre_processing(tweets):
 
