@@ -243,20 +243,28 @@ def pre_processing(tweets):
     # Change all the text to lower case. This is required as python interprets 'dog' and 'DOG' differently
     #print(tweets)
     #tweets = [tweet for tweet in tweets if detect(tweet) == 'en']
-    for i in range(tqdm(tweets, desc="Processing tweets:")):
-        tweets[i] = tweets[i].lower()
-        tweets[i] = process_tweet(tweets[i])
-    tweets = [process_tweet(tweet) for tweet in tqdm(tweets, desc="Process tweets")]
-
 
     urlPattern = r"((http://)[^ ]*|(https://)[^ ]*|( www\.)[^ ]*)"
     userPattern = '@[^\s]+'
 
-    tweets=[re.sub(urlPattern,' ', tweet) for tweet in tqdm(tweets, desc="Remove url:")]
-    tweets=[re.sub(userPattern,' ', tweet) for tweet in tqdm(tweets, desc="Remove users:")]
+    for i in tqdm(range(0, len(tweets)), desc="Processing tweets:"):
+        #lower case
+        tweets[i] = tweets[i].lower()
+        #process tweets
+        tweets[i] = process_tweet(tweets[i])
+        #remove url
+        tweets[i] = re.sub(urlPattern,' ', tweets[i])
+        #remove user tag
+        tweets[i] = re.sub(userPattern,' ', tweets[i])
+        #remove end-line character
+        tweets[i] = tweets[i].replace("\n", " ")
+        #remove symbol
+        tweets[i] = re.sub('[!"#$%&\'()*+,/:;<=>?@[\\]^_`{|}~]',' ', tweets[i])
+        #remove punctuation
+        tweets[i] = re.sub(r'[^\w\s]',' ', tweets[i])
 
     result = list()
-    for tweet in tweets:
+    for tweet in tqdm(tweets, desc="word tokenize process"):
         for word, value in abbreviations.items():
             if word in word_tokenize(tweet):
                 tweet = re.sub(word, value, tweet)
@@ -265,15 +273,6 @@ def pre_processing(tweets):
 
     tweets = result
 
-    # Remove all the \n elements
-    tweets=[tweet.replace("\n", " ") for tweet in tqdm(tweets, desc="Remove end-line char")]
-
-    # Remove all symbols
-    tweets=[re.sub('[!"#$%&\'()*+,/:;<=>?@[\\]^_`{|}~]',' ', tweet) for tweet in tqdm(tweets, desc="Remove symbol")]
-
-    #remove punctuation
-    tweets=[re.sub(r'[^\w\s',' ', tweet) for tweet in tqdm(tweets, desc="Remove punctuation")]
-    
     #tweets=[re.sub(word, abbreviations[word], tweet) for tweet in tweets for word in word_tokenize(tweet) if word in abbreviations.keys()]
 
 
