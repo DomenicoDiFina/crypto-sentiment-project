@@ -5,9 +5,9 @@ from nltk.stem.lancaster import LancasterStemmer
 import pickle
 from langdetect import detect
 #import snoop
+from tqdm import tqdm
 
 def pre_processing(tweets):
-
 
     abbreviations = {
         "$" : " dollar ",
@@ -243,19 +243,18 @@ def pre_processing(tweets):
     # Change all the text to lower case. This is required as python interprets 'dog' and 'DOG' differently
     #print(tweets)
     #tweets = [tweet for tweet in tweets if detect(tweet) == 'en']
-
-    tweets = [process_tweet(tweet) for tweet in tweets]
+    tweets = [process_tweet(tweet) for tweet in tqdm(tweets, desc="Process tweets")]
 
     # Copy of the original tweets, before preprocessing
     original_tweets = tweets.copy()
 
-    tweets=[tweet.lower() for tweet in tweets]
+    tweets=[tweet.lower() for tweet in tqdm(tweets, desc="Lower tweets")]
 
     urlPattern = r"((http://)[^ ]*|(https://)[^ ]*|( www\.)[^ ]*)"
     userPattern = '@[^\s]+'
 
-    tweets=[re.sub(urlPattern,' ', tweet) for tweet in tweets]
-    tweets=[re.sub(userPattern,' ', tweet) for tweet in tweets]
+    tweets=[re.sub(urlPattern,' ', tweet) for tweet in tqdm(tweets, desc="Remove url:")]
+    tweets=[re.sub(userPattern,' ', tweet) for tweet in tqdm(tweets, desc="Remove users:")]
 
     result = list()
     for tweet in tweets:
@@ -268,20 +267,14 @@ def pre_processing(tweets):
     tweets = result
 
     # Remove all the \n elements
-    tweets=[tweet.replace("\n", " ") for tweet in tweets]
+    tweets=[tweet.replace("\n", " ") for tweet in tqdm(tweets, desc="Remove end-line char")]
 
     # Remove all symbols
-    tweets=[re.sub('[!"#$%&\'()*+,/:;<=>?@[\\]^_`{|}~]',' ', tweet) for tweet in tweets]
+    tweets=[re.sub('[!"#$%&\'()*+,/:;<=>?@[\\]^_`{|}~]',' ', tweet) for tweet in tqdm(tweets, desc="Remove symbol")]
 
     #remove punctuation
-    tweets=[re.sub('-',' ', tweet) for tweet in tweets]
-    tweets=[re.sub(r'\s+',' ', tweet) for tweet in tweets]
-    tweets=[re.sub('  ',' ', tweet) for tweet in tweets]
-    tweets=[tweet.strip() for tweet in tweets]
-    tweets=[re.sub(r'\.',' ', tweet) for tweet in tweets]
-
+    tweets=[re.sub(r'[^\w\s',' ', tweet) for tweet in tqdm(tweets, desc="Remove punctuation")]
     
-
     #tweets=[re.sub(word, abbreviations[word], tweet) for tweet in tweets for word in word_tokenize(tweet) if word in abbreviations.keys()]
 
 
@@ -290,9 +283,8 @@ def pre_processing(tweets):
 
     pre_processed_tweets = list()
     # Remove stop words
-    for tweet in tweets_tokenized:
+    for tweet in tqdm(tweets_tokenized, desc="Remove stop word"):
         pre_processed_tweets.append(stop_words(tweet))
-
 
 
     return pre_processed_tweets
