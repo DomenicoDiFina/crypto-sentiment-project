@@ -268,7 +268,6 @@ def pre_processing(tweets):
         for word, value in abbreviations.items():
             if word in word_tokenize(tweet):
                 tweet = re.sub(word, value, tweet)
-            
         result.append(tweet)
 
     tweets = result
