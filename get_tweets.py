@@ -12,7 +12,9 @@ import numpy as np
 from keras.models import load_model
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM, Embedding, SpatialDropout1D
-
+import pickle
+from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
 
 crypto = ['bitcoin BTC', 'ethereum ETH', 'Ripple XRP', 'Binance Coin BNB', 'Tether USDT', 'Cardano ADA', 'Dogecoin DOGE', 'Polkadot DOT', 'Internet Computer ICP', 'XRP', 'Uniswap UNI', 'Polygon MATIC', 'Stellar XLM', 'Litecoin LTC', 'VeChain VET', 'Solana SOL', 'SHIBA INU SHIB']
 crypto = [c.lower() for c in crypto]
@@ -20,6 +22,9 @@ tf_idf_vectorizer = TfidfVectorizer()
 crypto_vectorized = tf_idf_vectorizer.fit_transform(crypto)
 
 model_sentiment = load_model('model_lstm_epoch_1.hd5')
+tokenizer_sentiment = pickle.load(open("tokenizer.pickle", "rb"))
+
+
 print(model_sentiment.summary())
 
 def get_tweets(topic, start_date, end_date, limit):
@@ -65,6 +70,16 @@ def daterange(start_date, end_date):
         yield start_date + timedelta(n)
     
 
+
+def get_sentiment(tweet):
+    print("len: ", len(tokenizer_sentiment.texts_to_sequences(tweet)))
+    x = np.asarray(tokenizer_sentiment.texts_to_sequences(tweet)).astype('float32')
+    pred = model_sentiment.predict(x)[0]
+    print("prediction: ", pred)
+    if(np.argmax(pred) == 0):
+        return "negative"
+    elif (np.argmax(pred) == 1):
+        return "positive"
 
 def get_topics(tweet):
     tweet_vectorized = tf_idf_vectorizer.transform([tweet])    

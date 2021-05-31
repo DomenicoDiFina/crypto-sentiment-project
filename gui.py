@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 #import mplfinance as mpf
 import datetime as dt
 from datetime import date, timedelta
-from get_tweets import get_topics, get_tweets
+from get_tweets import get_topics, get_tweets, get_sentiment
 
 start = date.today() - timedelta(days=1)
 end = date.today()
@@ -21,13 +21,20 @@ date_end = st.sidebar.date_input('Data Finale', end)
 
 
 if st.sidebar.button("Visualizza"):
+    st.write("AAAAAA")
+    st.write("bitcoin is negative sad")
+    st.write(get_sentiment("bitcoin is negative sad"))
     st.write(f"Grafico riguardante {crypto_name} dal {date_start} al {date_end}.")
     df = get_tweets('crypto', str(date_start), str(date_end), 100)
-    for i in range(5):
+    for i in range(10):
         topics = get_topics(df['processed_tweet'][i])
         if topics != '':
             if crypto_name.lower() in topics:
-                df['sentiment'][i] = '0'
+                
+                st.write(df["tweet"][i])
+                #print(df['processed_tweet'][i])
+                #st.write(get_sentiment(df['processed_tweet'][i]))
+                df['sentiment'][i] = get_sentiment(df['processed_tweet'][i])
                 df['emotion'][i] = 'sad'
 
     st.write(df)
