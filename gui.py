@@ -21,17 +21,15 @@ date_end = st.sidebar.date_input('Data Finale', end)
 
 
 if st.sidebar.button("Visualizza"):
-    st.write("AAAAAA")
-    st.write("bitcoin is negative sad")
-    st.write(get_sentiment("bitcoin is negative sad"))
     st.write(f"Grafico riguardante {crypto_name} dal {date_start} al {date_end}.")
     df = get_tweets('crypto', str(date_start), str(date_end), 100)
-    for i in range(10):
+    for i in df.index:
+        #print(f"i: {i}", df["processed_tweet"][i])
+        #st.write(i)
+        #st.write(df['processed_tweet'][i])
         topics = get_topics(df['processed_tweet'][i])
         if topics != '':
             if crypto_name.lower() in topics:
-                
-                st.write(df["tweet"][i])
                 #print(df['processed_tweet'][i])
                 #st.write(get_sentiment(df['processed_tweet'][i]))
                 df['sentiment'][i] = get_sentiment(df['processed_tweet'][i])
