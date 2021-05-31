@@ -21,11 +21,9 @@ crypto = [c.lower() for c in crypto]
 tf_idf_vectorizer = TfidfVectorizer()
 crypto_vectorized = tf_idf_vectorizer.fit_transform(crypto)
 
-model_sentiment = load_model('model_lstm_epoch_1.hd5')
+model_sentiment = load_model('model_lstm_epoch_1')
 tokenizer_sentiment = pickle.load(open("tokenizer.pickle", "rb"))
 
-
-print(model_sentiment.summary())
 
 def get_tweets(topic, start_date, end_date, limit):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
@@ -72,10 +70,8 @@ def daterange(start_date, end_date):
 
 
 def get_sentiment(tweet):
-    print("len: ", len(tokenizer_sentiment.texts_to_sequences(tweet)))
     x = np.asarray(tokenizer_sentiment.texts_to_sequences(tweet)).astype('float32')
     pred = model_sentiment.predict(x)[0]
-    print("prediction: ", pred)
     if(np.argmax(pred) == 0):
         return "negative"
     elif (np.argmax(pred) == 1):
