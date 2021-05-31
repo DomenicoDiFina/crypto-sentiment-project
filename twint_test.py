@@ -7,9 +7,9 @@ import pandas as pd
 c = twint.Config()
 c.Search = "crypto"
 c.Lang = "en" # non sembra funzionare
-c.Limit = 1000
-c.Since = '2021-05-28'
-c.Until = '2021-05-29'
+c.Limit = 10
+c.Since = '2021-05-27'
+c.Until = '2021-05-28'
 c.Verified = True # True se vogliamo i verificati, False altrimenti
 c.Output = "./test.csv"
 c.Store_csv = True
