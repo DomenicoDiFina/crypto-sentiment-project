@@ -1,4 +1,3 @@
-from pre_processing import process_tweet
 import streamlit as st
 #import pandas_datareader as web
 import matplotlib.pyplot as plt
