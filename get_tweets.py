@@ -24,6 +24,9 @@ crypto_vectorized = tf_idf_vectorizer.fit_transform(crypto)
 model_sentiment = load_model('model_lstm_epoch_1.h5')
 tokenizer_sentiment = pickle.load(open("tokenizer.pickle", "rb"))
 
+model_emotion = load_model("emotions_model_lstm")
+tokenizer_emotion = pickle.load(open("emotion_detection/tokenizer_emotion.pickle", "rb"))
+
 
 def get_tweets(topic, start_date, end_date, limit):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
@@ -76,6 +79,25 @@ def get_sentiment(tweet):
         return "negative"
     elif (np.argmax(pred) == 1):
         return "positive"
+
+
+"""
+UPDATE WITH NEW RAPPRESENTATION BASED ON NEW EMOTIONS MODEL
+"""
+def get_emotion(tweet):
+    pred = model_emotion.predict(pad_sequences(tokenizer_emotion.texts_to_sequences(tweet), maxlen=30, dtype='int32', value=0))[0]
+    if(np.argmax(pred) == 0):
+        return "happiness"
+    elif(np.argmax(pred) == 1):
+        return "love"
+    elif(np.argmax(pred) == 2):
+        return "neutral"
+    elif(np.argmax(pred) == 3):
+        return "other"
+    elif(np.argmax(pred) == 4):
+        return "sad"
+    elif(np.argmax(pred) == 5):
+        return "worry"
 
 def get_topics(tweet):
     tweet_vectorized = tf_idf_vectorizer.transform([tweet])    
