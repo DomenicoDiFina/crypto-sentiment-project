@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 #import mplfinance as mpf
 import datetime as dt
 from datetime import date, timedelta
-from get_tweets import get_topics, get_tweets, get_sentiment
+from get_tweets import get_topics, get_tweets, get_sentiment, get_emotion
 
 start = date.today() - timedelta(days=1)
 end = date.today()
@@ -33,8 +33,12 @@ if st.sidebar.button("Visualizza"):
                 #print(df['processed_tweet'][i])
                 #st.write(get_sentiment(df['processed_tweet'][i]))
                 df['sentiment'][i] = get_sentiment(df['processed_tweet'][i])
-                df['emotion'][i] = 'sad'
+                df['emotion'][i] = get_emotion(df['processed_tweet'][i])
+                st.write(i)
+                st.write(df["tweet"][i])
+                st.write(df['sentiment'][i])
+                st.write(df['emotion'][i])
 
-    st.write(df)
+    #st.write(df)
 
     # st.pyplot(fig) # per inserire il la figure matplotlib nella finestra
