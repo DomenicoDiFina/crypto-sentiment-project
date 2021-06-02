@@ -98,10 +98,8 @@ def get_emotion(tweet):
     elif(np.argmax(pred) == 2):
         return "neutral"
     elif(np.argmax(pred) == 3):
-        return "other"
-    elif(np.argmax(pred) == 4):
         return "sad"
-    elif(np.argmax(pred) == 5):
+    elif(np.argmax(pred) == 4):
         return "worry"
 
 def get_topics(tweet):
@@ -126,15 +124,13 @@ def create_emotion_plot(emotion_list):
     0: happiness
     1: love
     2: neutral
-    3: other
-    4: sad
-    5: worry
+    3: sad
+    4: worry
     """
     y = {}
     y["happiness"] = np.zeros(len(x))
     y["love"] = np.zeros(len(x))
     y["neutral"] = np.zeros(len(x))
-    y["other"] = np.zeros(len(x))
     y["sad"] = np.zeros(len(x))
     y["worry"] = np.zeros(len(x))
 
@@ -147,11 +143,9 @@ def create_emotion_plot(emotion_list):
     ax.bar(x, y["happiness"], label='happy')
     ax.bar(x, y["love"], bottom=y["happiness"], label='love')
     ax.bar(x, y["neutral"], bottom=y["love"]+y["happiness"],label='neutral')
-    ax.bar(x, y["other"], bottom=y["love"]+y["happiness"]+y["neutral"], label='other')
-    ax.bar(x, y["sad"], bottom=y["love"]+y["happiness"]+y["neutral"]+y["other"], label='sad')
-    ax.bar(x, y["worry"],bottom=y["love"]+y["happiness"]+y["neutral"]+y["other"]+y["sad"], label='worry')
+    ax.bar(x, y["sad"], bottom=y["love"]+y["happiness"]+y["neutral"], label='sad')
+    ax.bar(x, y["worry"],bottom=y["love"]+y["happiness"]+y["neutral"]+y["sad"], label='worry')
     ax.legend()
-    print(y)
     return fig
 
 
@@ -167,7 +161,6 @@ def create_sentiment_plot(sentiment_list):
         y.append(0)
         for sentiment in sentiment_list:
             if sentiment[0] == day:
-                print(day, sentiment[1])
                 y[-1] += sentiment[1]
 
     #plotting   
