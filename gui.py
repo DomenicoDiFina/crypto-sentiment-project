@@ -54,8 +54,8 @@ if st.sidebar.button("Visualizza"):
                 #st.write(df['emotion'][i])
 
     emotion_figure, sentiment_figure, combined_figure = create_plots(emotion_list, sentiment_list)
-    st.write(df)
+    #st.write(df)
 
-    st.pyplot(emotion_figure) # per inserire il la figure matplotlib nella finestra
+    st.pyplot(emotion_figure) 
     st.pyplot(sentiment_figure)
     st.pyplot(combined_figure)

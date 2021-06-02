@@ -139,12 +139,15 @@ def create_emotion_plot(emotion_list):
             if emotion[0] == x[day]:
                 y[emotion[1]][day] += 1
 
+    plt.style.use('dark_background')
     fig, ax = plt.subplots()
-    ax.bar(x, y["happiness"], label='happy')
-    ax.bar(x, y["love"], bottom=y["happiness"], label='love')
-    ax.bar(x, y["neutral"], bottom=y["love"]+y["happiness"],label='neutral')
-    ax.bar(x, y["sad"], bottom=y["love"]+y["happiness"]+y["neutral"], label='sad')
-    ax.bar(x, y["worry"],bottom=y["love"]+y["happiness"]+y["neutral"]+y["sad"], label='worry')
+
+    fig.suptitle(f'Emotions Counter dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
+    ax.bar(x, y["happiness"], label='happy', color='#003f5c')
+    ax.bar(x, y["love"], bottom=y["happiness"], label='love', color='#58508d')
+    ax.bar(x, y["neutral"], bottom=y["love"]+y["happiness"],label='neutral', color='#bc5090')
+    ax.bar(x, y["sad"], bottom=y["love"]+y["happiness"]+y["neutral"], label='sad', color='#ff6361')
+    ax.bar(x, y["worry"],bottom=y["love"]+y["happiness"]+y["neutral"]+y["sad"], label='worry', color='#ffa600')
     ax.legend()
     return fig
 
@@ -164,10 +167,13 @@ def create_sentiment_plot(sentiment_list):
                 y[-1] += sentiment[1]
 
     #plotting   
+    plt.style.use('dark_background')
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
     #ax.style.use('fivethirtyeight')
     ax.plot(x, y)
+
+    fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
 
     return fig
 
