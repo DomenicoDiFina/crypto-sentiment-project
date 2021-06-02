@@ -1,4 +1,5 @@
 from json import load
+from numpy.ma.core import masked_where
 import twint
 import pandas as pd
 from datetime import datetime
@@ -15,6 +16,10 @@ from tensorflow.keras.layers import Dense, LSTM, Embedding, SpatialDropout1D
 import pickle
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
+
+import matplotlib.pyplot as plt
+from matplotlib.collections import LineCollection
+from matplotlib.colors import ListedColormap, BoundaryNorm
 
 crypto = ['bitcoin BTC', 'ethereum ETH', 'Ripple XRP', 'Binance Coin BNB', 'Tether USDT', 'Cardano ADA', 'Dogecoin DOGE', 'Polkadot DOT', 'Internet Computer ICP', 'XRP', 'Uniswap UNI', 'Polygon MATIC', 'Stellar XLM', 'Litecoin LTC', 'VeChain VET', 'Solana SOL', 'SHIBA INU SHIB']
 crypto = [c.lower() for c in crypto]
@@ -76,9 +81,9 @@ def get_sentiment(tweet):
     
     pred = model_sentiment.predict(pad_sequences(tokenizer_sentiment.texts_to_sequences(tweet), maxlen=48, dtype='int32', value=0))[0]
     if(np.argmax(pred) == 0):
-        return "negative"
+        return -1
     elif (np.argmax(pred) == 1):
-        return "positive"
+        return 1
 
 
 """
@@ -107,3 +112,73 @@ def get_topics(tweet):
         return [crypto[i] for i, value in enumerate(cosine_sim) if value > 0]
     else:
         return ''
+
+
+
+def create_emotion_plot(emotion_list):
+
+    date_list = sorted(list(set([datetime.strptime(day[0], '%Y-%m-%d') for day in emotion_list])))
+    start_date = date_list[0]
+    end_date = date_list[-1] + timedelta(days=1)
+
+    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
+    """
+    0: happiness
+    1: love
+    2: neutral
+    3: other
+    4: sad
+    5: worry
+    """
+    y = {}
+    y["happiness"] = np.zeros(len(x))
+    y["love"] = np.zeros(len(x))
+    y["neutral"] = np.zeros(len(x))
+    y["other"] = np.zeros(len(x))
+    y["sad"] = np.zeros(len(x))
+    y["worry"] = np.zeros(len(x))
+
+    for day in range(0, len(x)):
+        for emotion in emotion_list:
+            if emotion[0] == x[day]:
+                y[emotion[1]][day] += 1
+
+    fig, ax = plt.subplots()
+    ax.bar(x, y["happiness"], label='happy')
+    ax.bar(x, y["love"], bottom=y["happiness"], label='love')
+    ax.bar(x, y["neutral"], bottom=y["love"]+y["happiness"],label='neutral')
+    ax.bar(x, y["other"], bottom=y["love"]+y["happiness"]+y["neutral"], label='other')
+    ax.bar(x, y["sad"], bottom=y["love"]+y["happiness"]+y["neutral"]+y["other"], label='sad')
+    ax.bar(x, y["worry"],bottom=y["love"]+y["happiness"]+y["neutral"]+y["other"]+y["sad"], label='worry')
+    ax.legend()
+    print(y)
+    return fig
+
+
+def create_sentiment_plot(sentiment_list):
+
+    date_list = sorted(list(set([datetime.strptime(day[0], '%Y-%m-%d') for day in sentiment_list])))
+    start_date = date_list[0]
+    end_date = date_list[-1] + timedelta(days=1)
+
+    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
+    y = list()
+    for day in x:
+        y.append(0)
+        for sentiment in sentiment_list:
+            if sentiment[0] == day:
+                print(day, sentiment[1])
+                y[-1] += sentiment[1]
+
+    #plotting   
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    #ax.style.use('fivethirtyeight')
+    ax.plot(x, y)
+
+    return fig
+
+
+def create_plots(emotion_list, sentiment_list):
+
+    return create_sentiment_plot(sentiment_list), create_emotion_plot(emotion_list), create_sentiment_plot(sentiment_list)
