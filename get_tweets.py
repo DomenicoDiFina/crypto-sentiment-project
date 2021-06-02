@@ -140,7 +140,9 @@ def create_emotion_plot(emotion_list):
                 y[emotion[1]][day] += 1
 
     plt.style.use('dark_background')
+    
     fig, ax = plt.subplots()
+    fig.patch.set_alpha(0)
 
     fig.suptitle(f'Emotions Counter dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
     ax.bar(x, y["happiness"], label='happy', color='#003f5c')
@@ -169,6 +171,7 @@ def create_sentiment_plot(sentiment_list):
     #plotting   
     plt.style.use('dark_background')
     fig = plt.figure()
+    fig.patch.set_alpha(0)
     ax = fig.add_subplot(1, 1, 1)
     #ax.style.use('fivethirtyeight')
     ax.plot(x, y)
