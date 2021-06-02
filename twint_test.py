@@ -5,13 +5,11 @@ import pandas as pd
 ############# Ricerca Tweet ###################
 
 c = twint.Config()
-c.Search = "crypto"
+c.Search = "love"
 c.Lang = "en" # non sembra funzionare
-c.Limit = 10
-c.Since = '2021-05-27'
-c.Until = '2021-05-28'
+c.Limit = 10000
 c.Verified = True # True se vogliamo i verificati, False altrimenti
-c.Output = "./test.csv"
+c.Output = "./love.csv"
 c.Store_csv = True
 c.Hide_output = True
 
