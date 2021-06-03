@@ -98,12 +98,33 @@ def get_sentiment(tweet):
     elif (np.argmax(pred) == 1):
         return 1
 
+def get_sentiment_list(tweets): 
+    pred = model_sentiment.predict(pad_sequences(tokenizer_sentiment.texts_to_sequences(tweet), maxlen=48, dtype='int32', value=0))[0]
+    if(np.argmax(pred) == 0):
+        return -1
+    elif (np.argmax(pred) == 1):
+        return 1
+
 
 """
 UPDATE WITH NEW RAPPRESENTATION BASED ON NEW EMOTIONS MODEL
 """
 def get_emotion(tweet):
     pred = model_emotion.predict(pad_sequences(tokenizer_emotion.texts_to_sequences(tweet), maxlen=30, dtype='int32', value=0))[0]
+    if(np.argmax(pred) == 0):
+        return "happiness"
+    elif(np.argmax(pred) == 1):
+        return "love"
+    elif(np.argmax(pred) == 2):
+        return "neutral"
+    elif(np.argmax(pred) == 3):
+        return "sad"
+    elif(np.argmax(pred) == 4):
+        return "worry"
+
+
+def get_emotion_list(tweets):
+    pred = model_emotion.predict(pad_sequences(tokenizer_emotion.texts_to_sequences(tweets), maxlen=30, dtype='int32', value=0))[0]
     if(np.argmax(pred) == 0):
         return "happiness"
     elif(np.argmax(pred) == 1):
@@ -235,7 +256,7 @@ def create_combined_plot(sentiment_list, emotion_list):
     plt.xticks(rotation=90)
     plt.locator_params(axis="x", nbins=15)
 
-    fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {(end_date - timedelta(days=1)).strftime("%d-%m-%Y")}')
+    fig.suptitle(f'Sentiment e Emozioni Combinate dal {start_date.strftime("%d-%m-%Y")} al {(end_date - timedelta(days=1)).strftime("%d-%m-%Y")}')
 
     return fig
 
