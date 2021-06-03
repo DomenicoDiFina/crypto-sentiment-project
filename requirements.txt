@@ -4,7 +4,7 @@ pandas
 scikit-learn
 scipy
 keras
-tensorflow 2.5.0
+tensorflow==2.5.0
 matplotlib
 langdetect
 nltk
