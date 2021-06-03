@@ -7,6 +7,8 @@ from langdetect import detect
 #import snoop
 from tqdm import tqdm
 
+nltk.download('punkt')
+
 def pre_processing(tweets):
 
     abbreviations = {
