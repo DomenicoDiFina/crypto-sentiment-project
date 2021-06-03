@@ -144,6 +144,7 @@ def create_emotion_plot(emotion_list):
     fig, ax = plt.subplots()
     fig.patch.set_alpha(0)
 
+    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
     fig.suptitle(f'Emotions Counter dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
     ax.bar(x, y["happiness"], label='happy', color='#003f5c')
     ax.bar(x, y["love"], bottom=y["happiness"], label='love', color='#58508d')
@@ -151,6 +152,8 @@ def create_emotion_plot(emotion_list):
     ax.bar(x, y["sad"], bottom=y["love"]+y["happiness"]+y["neutral"], label='sad', color='#ff6361')
     ax.bar(x, y["worry"],bottom=y["love"]+y["happiness"]+y["neutral"]+y["sad"], label='worry', color='#ffa600')
     ax.legend()
+    plt.xticks(rotation=90)
+    plt.locator_params(axis="x", nbins=15)
     return fig
 
 
@@ -168,13 +171,18 @@ def create_sentiment_plot(sentiment_list):
             if sentiment[0] == day:
                 y[-1] += sentiment[1]
 
+    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
+   
     #plotting   
     plt.style.use('dark_background')
     fig = plt.figure()
     fig.patch.set_alpha(0)
     ax = fig.add_subplot(1, 1, 1)
+    
     #ax.style.use('fivethirtyeight')
     ax.plot(x, y)
+    plt.xticks(rotation=90)
+    plt.locator_params(axis="x", nbins=15)
 
     fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
 
