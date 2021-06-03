@@ -9,6 +9,7 @@ from tqdm import tqdm
 import nltk
 
 nltk.download('punkt')
+nltk.download('stopwords')
 
 def pre_processing(tweets):
 
