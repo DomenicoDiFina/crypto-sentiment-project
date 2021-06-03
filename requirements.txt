@@ -3,11 +3,10 @@ twint
 pandas
 scikit-learn
 scipy
-keras
-tensorflow==2.2.0
+tensorflow==2.1.0
 matplotlib
 langdetect
 nltk
 tqdm
 streamlit
-tensorflow-estimator==2.2.0
+tensorflow-estimator==2.1.0
