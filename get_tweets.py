@@ -180,7 +180,7 @@ def create_emotion_plot(emotion_list):
     fig.patch.set_alpha(0)
 
     x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
-    fig.suptitle(f'Emotions Counter dal {start_date.strftime("%d-%m-%Y")} al {(end_date - timedelta(days=1)).strftime("%d-%m-%Y")}')
+    fig.suptitle(f'Emotions Counter dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
     ax.bar(x, y["happiness"], label='happy', color='#003f5c')
     ax.bar(x, y["love"], bottom=y["happiness"], label='love', color='#58508d')
     ax.bar(x, y["neutral"], bottom=y["love"]+y["happiness"],label='neutral', color='#bc5090')
@@ -199,7 +199,7 @@ def create_sentiment_plot(sentiment_list):
     start_date = date_list[0]
     end_date = date_list[-1] + timedelta(days=1)
 
-    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
+    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
     y = list()
     for day in x:
         y.append(0)
@@ -222,7 +222,7 @@ def create_sentiment_plot(sentiment_list):
     plt.xticks(rotation=90)
     plt.locator_params(axis="x", nbins=15)
 
-    fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {(end_date - timedelta(days=1)).strftime("%d-%m-%Y")}')
+    fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
 
     return fig
 
@@ -233,7 +233,7 @@ def create_combined_plot(sentiment_list, emotion_list):
     start_date = date_list[0]
     end_date = date_list[-1] + timedelta(days=1)
 
-    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
+    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
     y = list()
     for day in x:
         y.append(0)
@@ -256,7 +256,7 @@ def create_combined_plot(sentiment_list, emotion_list):
     plt.xticks(rotation=90)
     plt.locator_params(axis="x", nbins=15)
 
-    fig.suptitle(f'Sentiment e Emozioni Combinate dal {start_date.strftime("%d-%m-%Y")} al {(end_date - timedelta(days=1)).strftime("%d-%m-%Y")}')
+    fig.suptitle(f'Sentiment e Emozioni Combinate dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
 
     return fig
 
