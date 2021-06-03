@@ -1,0 +1,12 @@
+numpy
+twint
+pandas
+scikit-learn
+scipy
+keras
+tensorflow
+matplotlib
+langdetect
+nltk
+tqdm
+streamlit
