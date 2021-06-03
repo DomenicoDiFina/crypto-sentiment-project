@@ -189,7 +189,6 @@ def create_emotion_plot(emotion_list):
     ax.legend()
     
     plt.xticks(rotation=90)
-    plt.locator_params(axis="x", nbins=15)
     return fig
 
 
@@ -220,7 +219,6 @@ def create_sentiment_plot(sentiment_list):
     yabs_max = abs(max(ax.get_ylim(), key=abs))
     ax.set_ylim(ymin=-yabs_max, ymax=yabs_max)
     plt.xticks(rotation=90)
-    plt.locator_params(axis="x", nbins=15)
 
     fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
 
@@ -254,7 +252,7 @@ def create_combined_plot(sentiment_list, emotion_list):
     yabs_max = abs(max(ax.get_ylim(), key=abs))
     ax.set_ylim(ymin=-yabs_max, ymax=yabs_max)
     plt.xticks(rotation=90)
-    plt.locator_params(axis="x", nbins=15)
+
 
     fig.suptitle(f'Sentiment e Emozioni Combinate dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
 
