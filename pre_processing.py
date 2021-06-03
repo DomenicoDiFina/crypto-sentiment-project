@@ -6,6 +6,7 @@ import pickle
 from langdetect import detect
 #import snoop
 from tqdm import tqdm
+import nltk
 
 nltk.download('punkt')
 
