@@ -207,7 +207,7 @@ def create_sentiment_plot(sentiment_list):
             if sentiment[0] == day:
                 y[-1] += sentiment[1]
 
-    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
+    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
    
     #plotting   
     plt.style.use('dark_background')
