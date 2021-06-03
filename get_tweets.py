@@ -160,7 +160,7 @@ def create_emotion_plot(emotion_list):
     fig, ax = plt.subplots()
     fig.patch.set_alpha(0)
 
-    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
+    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
     fig.suptitle(f'Emotions Counter dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
     ax.bar(x, y["happiness"], label='happy', color='#003f5c')
     ax.bar(x, y["love"], bottom=y["happiness"], label='love', color='#58508d')
