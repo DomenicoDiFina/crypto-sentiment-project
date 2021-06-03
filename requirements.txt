@@ -10,3 +10,4 @@ langdetect
 nltk
 tqdm
 streamlit
+tensorflow-estimator==2.1.*
