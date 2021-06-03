@@ -33,12 +33,22 @@ model_emotion = load_model("emotions_model_lstm")
 tokenizer_emotion = pickle.load(open("emotion_detection/tokenizer_emotion.pickle", "rb"))
 
 
-def get_tweets(topic, start_date, end_date, limit):
+emotions_dict = {
+    'neutral' : 1,
+    'happiness' : 2,
+    'love' : 3,
+    'worry' : 2,
+    'sad' : 3
+}
+
+
+def get_tweets(topic, start_date, end_date, limit, is_verified):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
     end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
 
 
     date_range = list(daterange(start_date, end_date))
+
 
     for index in range(len(date_range)-1):
         c = twint.Config()
@@ -46,7 +56,7 @@ def get_tweets(topic, start_date, end_date, limit):
         c.Limit = limit
         c.Since = date_range[index].strftime("%Y-%m-%d")
         c.Until = date_range[index+1].strftime("%Y-%m-%d")
-        c.Verified = True # True se vogliamo i verificati, False altrimenti
+        c.Verified = is_verified # True se vogliamo i verificati, False altrimenti
         c.Output = f"./tweets.csv"
         c.Store_csv = True
         c.Hide_output = True
@@ -55,9 +65,12 @@ def get_tweets(topic, start_date, end_date, limit):
 
     df = pd.read_csv('tweets.csv')
 
+    
+
     df = df[df['language'] == 'en']
 
     df['processed_tweet'] = pre_processing(list(df['tweet']))
+
 
     df["processed_tweet"] = df['processed_tweet'].apply(lambda x: ' '.join(map(str,x)))
 
@@ -77,8 +90,7 @@ def daterange(start_date, end_date):
     
 
 
-def get_sentiment(tweet):
-    
+def get_sentiment(tweet): 
     pred = model_sentiment.predict(pad_sequences(tokenizer_sentiment.texts_to_sequences(tweet), maxlen=48, dtype='int32', value=0))[0]
     if(np.argmax(pred) == 0):
         return -1
@@ -116,6 +128,7 @@ def get_topics(tweet):
 def create_emotion_plot(emotion_list):
 
     date_list = sorted(list(set([datetime.strptime(day[0], '%Y-%m-%d') for day in emotion_list])))
+    print('date_list: ', date_list)
     start_date = date_list[0]
     end_date = date_list[-1] + timedelta(days=1)
 
@@ -152,6 +165,7 @@ def create_emotion_plot(emotion_list):
     ax.bar(x, y["sad"], bottom=y["love"]+y["happiness"]+y["neutral"], label='sad', color='#ff6361')
     ax.bar(x, y["worry"],bottom=y["love"]+y["happiness"]+y["neutral"]+y["sad"], label='worry', color='#ffa600')
     ax.legend()
+    
     plt.xticks(rotation=90)
     plt.locator_params(axis="x", nbins=15)
     return fig
@@ -178,9 +192,45 @@ def create_sentiment_plot(sentiment_list):
     fig = plt.figure()
     fig.patch.set_alpha(0)
     ax = fig.add_subplot(1, 1, 1)
+
     
-    #ax.style.use('fivethirtyeight')
     ax.plot(x, y)
+    yabs_max = abs(max(ax.get_ylim(), key=abs))
+    ax.set_ylim(ymin=-yabs_max, ymax=yabs_max)
+    plt.xticks(rotation=90)
+    plt.locator_params(axis="x", nbins=15)
+
+    fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
+
+    return fig
+
+
+def create_combined_plot(sentiment_list, emotion_list):
+
+    date_list = sorted(list(set([datetime.strptime(day[0], '%Y-%m-%d') for day in sentiment_list])))
+    start_date = date_list[0]
+    end_date = date_list[-1] + timedelta(days=1)
+
+    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
+    y = list()
+    for day in x:
+        y.append(0)
+        for index, sentiment in enumerate(sentiment_list):
+            if sentiment[0] == day:
+                y[-1] += sentiment[1] * emotions_dict[emotion_list[index][1]]
+
+
+    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
+   
+    #plotting   
+    plt.style.use('dark_background')
+    fig = plt.figure()
+    fig.patch.set_alpha(0)
+    ax = fig.add_subplot(1, 1, 1)
+    
+    ax.plot(x, y)
+    yabs_max = abs(max(ax.get_ylim(), key=abs))
+    ax.set_ylim(ymin=-yabs_max, ymax=yabs_max)
     plt.xticks(rotation=90)
     plt.locator_params(axis="x", nbins=15)
 
@@ -191,4 +241,4 @@ def create_sentiment_plot(sentiment_list):
 
 def create_plots(emotion_list, sentiment_list):
 
-    return create_sentiment_plot(sentiment_list), create_emotion_plot(emotion_list), create_sentiment_plot(sentiment_list)
+    return create_sentiment_plot(sentiment_list), create_emotion_plot(emotion_list), create_combined_plot(sentiment_list, emotion_list)

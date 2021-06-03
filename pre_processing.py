@@ -264,10 +264,12 @@ def pre_processing(tweets):
         tweets[i] = re.sub(r'[^\w\s]',' ', tweets[i])
 
     result = list()
+
     for tweet in tqdm(tweets, desc="word tokenize process"):
-        for word, value in abbreviations.items():
-            if word in word_tokenize(tweet):
-                tweet = re.sub(word, value, tweet)
+        for word in word_tokenize(tweet):
+            if word in abbreviations.keys():
+                tweet = re.sub(word, abbreviations[word], tweet)
+
         result.append(tweet)
 
     tweets = result
@@ -385,6 +387,6 @@ def process_tweet(tweet):
 #     return converted_tweets
 
 
-# if __name__ == '__main__':
-#     result = pre_processing(["don't do that, call me asap, 5$ https://ciao.com", "the film was good"])
-#     print(result)
+if __name__ == '__main__':
+    result = pre_processing(["don't do that, call me asap, 5$ https://ciao.com", "the film was good"])
+    print(result)
