@@ -6,6 +6,9 @@ import datetime as dt
 from datetime import date, timedelta
 from get_tweets import get_topics, get_tweets, get_sentiment, get_emotion, create_plots
 from tqdm import tqdm
+from streamlit import caching
+
+caching.clear_cache()
 
 start = date.today() - timedelta(days=1)
 end = date.today()
@@ -20,7 +23,6 @@ date_start = st.sidebar.date_input('Data Iniziale', start)
 date_end = st.sidebar.date_input('Data Finale', end)
 
 limit_tweets = st.sidebar.select_slider('Seleziona il numero di tweet da recuperare per giorno', options=[100, 200, 300, 400])
-checkbox_verified = st.sidebar.checkbox("Solo Account Verificati")
 
 
 hide_streamlit_style = """
@@ -39,7 +41,7 @@ if st.sidebar.button("Visualizza"):
     st.title(f"Grafico riguardante {crypto_name} dal {date_start} al {date_end}.")
     print('Recupero tweet in corso...')
     progress_bar = st.progress(0.2)
-    df = get_tweets('crypto', str(date_start), str(date_end), limit_tweets, checkbox_verified)
+    df = get_tweets('crypto', str(date_start), str(date_end), limit_tweets)
     print('Recupero tweet avvenuto')
     progress_bar.progress(0.5)
     progress_count = 0.5

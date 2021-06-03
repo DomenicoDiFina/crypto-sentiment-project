@@ -42,7 +42,7 @@ emotions_dict = {
 }
 
 
-def get_tweets(topic, start_date, end_date, limit, is_verified):
+def get_tweets(topic, start_date, end_date, limit):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
     end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
 
@@ -54,9 +54,10 @@ def get_tweets(topic, start_date, end_date, limit, is_verified):
         c = twint.Config()
         c.Search = topic
         c.Limit = limit
-        c.Since = date_range[index].strftime("%Y-%m-%d")
+        c.Since = date_range[index].strftime("%Y-%m-%d")  
+        print('since: ', c.Since)
         c.Until = date_range[index+1].strftime("%Y-%m-%d")
-        c.Verified = is_verified # True se vogliamo i verificati, False altrimenti
+        c.Verified = True # True se vogliamo i verificati, False altrimenti
         c.Output = f"./tweets.csv"
         c.Store_csv = True
         c.Hide_output = True
@@ -158,7 +159,7 @@ def create_emotion_plot(emotion_list):
     fig.patch.set_alpha(0)
 
     x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
-    fig.suptitle(f'Emotions Counter dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
+    fig.suptitle(f'Emotions Counter dal {start_date.strftime("%d-%m-%Y")} al {(end_date - timedelta(days=1)).strftime("%d-%m-%Y")}')
     ax.bar(x, y["happiness"], label='happy', color='#003f5c')
     ax.bar(x, y["love"], bottom=y["happiness"], label='love', color='#58508d')
     ax.bar(x, y["neutral"], bottom=y["love"]+y["happiness"],label='neutral', color='#bc5090')
@@ -200,7 +201,7 @@ def create_sentiment_plot(sentiment_list):
     plt.xticks(rotation=90)
     plt.locator_params(axis="x", nbins=15)
 
-    fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
+    fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {(end_date - timedelta(days=1)).strftime("%d-%m-%Y")}')
 
     return fig
 
@@ -234,7 +235,7 @@ def create_combined_plot(sentiment_list, emotion_list):
     plt.xticks(rotation=90)
     plt.locator_params(axis="x", nbins=15)
 
-    fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
+    fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {(end_date - timedelta(days=1)).strftime("%d-%m-%Y")}')
 
     return fig
 
