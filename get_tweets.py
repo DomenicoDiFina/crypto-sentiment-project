@@ -98,13 +98,6 @@ def get_sentiment(tweet):
     elif (np.argmax(pred) == 1):
         return 1
 
-def get_sentiment_list(tweets): 
-    pred = model_sentiment.predict(pad_sequences(tokenizer_sentiment.texts_to_sequences(tweet), maxlen=48, dtype='int32', value=0))[0]
-    if(np.argmax(pred) == 0):
-        return -1
-    elif (np.argmax(pred) == 1):
-        return 1
-
 
 """
 UPDATE WITH NEW RAPPRESENTATION BASED ON NEW EMOTIONS MODEL
@@ -123,18 +116,6 @@ def get_emotion(tweet):
         return "worry"
 
 
-def get_emotion_list(tweets):
-    pred = model_emotion.predict(pad_sequences(tokenizer_emotion.texts_to_sequences(tweets), maxlen=30, dtype='int32', value=0))[0]
-    if(np.argmax(pred) == 0):
-        return "happiness"
-    elif(np.argmax(pred) == 1):
-        return "love"
-    elif(np.argmax(pred) == 2):
-        return "neutral"
-    elif(np.argmax(pred) == 3):
-        return "sad"
-    elif(np.argmax(pred) == 4):
-        return "worry"
 
 def get_topics(tweet):
     tweet_vectorized = tf_idf_vectorizer.transform([tweet])    
@@ -198,7 +179,7 @@ def create_sentiment_plot(sentiment_list):
     start_date = date_list[0]
     end_date = date_list[-1] + timedelta(days=1)
 
-    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
+    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
     y = list()
     for day in x:
         y.append(0)
@@ -206,7 +187,7 @@ def create_sentiment_plot(sentiment_list):
             if sentiment[0] == day:
                 y[-1] += sentiment[1]
 
-    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
+    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
    
     #plotting   
     plt.style.use('dark_background')
@@ -231,7 +212,7 @@ def create_combined_plot(sentiment_list, emotion_list):
     start_date = date_list[0]
     end_date = date_list[-1] + timedelta(days=1)
 
-    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
+    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
     y = list()
     for day in x:
         y.append(0)
@@ -240,7 +221,7 @@ def create_combined_plot(sentiment_list, emotion_list):
                 y[-1] += sentiment[1] * emotions_dict[emotion_list[index][1]]
 
 
-    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
+    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
    
     #plotting   
     plt.style.use('dark_background')

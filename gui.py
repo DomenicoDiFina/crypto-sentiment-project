@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 #import mplfinance as mpf
 import datetime as dt
 from datetime import date, timedelta
-from get_tweets import get_topics, get_tweets, get_sentiment, get_emotion, create_plots, get_emotion_list, get_sentiment_list
+from get_tweets import get_topics, get_tweets, get_sentiment, get_emotion, create_plots
 from tqdm import tqdm
 import time
 
