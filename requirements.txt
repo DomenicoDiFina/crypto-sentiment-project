@@ -1,5 +1,5 @@
 numpy
-twint
+git+https://github.com/twintproject/twint.git@origin/master#egg=twint
 pandas
 scikit-learn
 scipy
