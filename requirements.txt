@@ -1,0 +1,12 @@
+numpy
+twint
+pandas
+scikit-learn
+scipy
+tensorflow==2.1.0
+matplotlib
+langdetect
+nltk
+tqdm
+streamlit
+tensorflow-estimator==2.1.0
