@@ -6,10 +6,7 @@ import datetime as dt
 from datetime import date, timedelta
 from get_tweets import get_topics, get_tweets, get_sentiment, get_emotion, create_plots, get_emotion_list, get_sentiment_list
 from tqdm import tqdm
-from streamlit import caching
 import time
-
-caching.clear_cache()
 
 start = date.today() - timedelta(days=1)
 end = date.today()
