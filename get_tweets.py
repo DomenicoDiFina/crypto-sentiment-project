@@ -135,7 +135,7 @@ def create_emotion_plot(emotion_list):
     start_date = date_list[0]
     end_date = date_list[-1] + timedelta(days=1)
 
-    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
+    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
     """
     0: happiness
     1: love
@@ -179,7 +179,7 @@ def create_sentiment_plot(sentiment_list):
     start_date = date_list[0]
     end_date = date_list[-1] + timedelta(days=1)
 
-    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
+    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
     y = list()
     for day in x:
         y.append(0)
@@ -187,7 +187,7 @@ def create_sentiment_plot(sentiment_list):
             if sentiment[0] == day:
                 y[-1] += sentiment[1]
 
-    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
+    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
    
     #plotting   
     plt.style.use('dark_background')
