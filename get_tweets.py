@@ -10,12 +10,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy import spatial
 import numpy as np
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM, Embedding, SpatialDropout1D
 import pickle
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
