@@ -20,7 +20,7 @@ from keras.preprocessing.sequence import pad_sequences
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import ListedColormap, BoundaryNorm
-from pytz import timezone
+
 
 crypto = ['bitcoin BTC', 'ethereum ETH', 'Ripple XRP', 'Binance Coin BNB', 'Tether USDT', 'Cardano ADA', 'Dogecoin DOGE', 'Polkadot DOT', 'Internet Computer ICP', 'XRP', 'Uniswap UNI', 'Polygon MATIC', 'Stellar XLM', 'Litecoin LTC', 'VeChain VET', 'Solana SOL', 'SHIBA INU SHIB']
 crypto = [c.lower() for c in crypto]
@@ -42,7 +42,6 @@ emotions_dict = {
     'sad' : 3
 }
 
-timezone = timezone('Europe/Rome')
 
 
 def get_tweets(topic, start_date, end_date, limit):
@@ -50,21 +49,24 @@ def get_tweets(topic, start_date, end_date, limit):
     end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
 
 
-    start_date.astimezone(timezone)
-    end_date.astimezone(timezone)
-
 
     date_range = list(daterange(start_date, end_date))
 
+    print()
+    print()
+    print(date_range)
+    print()
+    print()
 
 
 
-    for index in range(0,len(date_range)-1):
+
+    for index in range(len(date_range)-1):
         c = twint.Config()
         c.Search = topic
         c.Limit = limit
-        c.Since = date_range[index].strftime("%Y-%m-%d") + " 05:00:00"
-        c.Until = date_range[index+1].strftime("%Y-%m-%d") + " 05:00:00"
+        c.Since = date_range[index].strftime("%Y-%m-%d") + " 02:00:00"
+        c.Until = date_range[index+1].strftime("%Y-%m-%d") + " 02:00:00"
         c.Verified = True # True se vogliamo i verificati, False altrimenti
         c.Output = f"./tweets.csv"
         c.Store_csv = True
@@ -89,7 +91,7 @@ def get_tweets(topic, start_date, end_date, limit):
 
     os.remove('tweets.csv')
 
-    return df.loc[:,['date', 'time', 'tweet', 'language', 'processed_tweet', 'sentiment', 'emotion']], c.Since, c.Until
+    return df.loc[:,['date', 'time', 'tweet', 'language', 'processed_tweet', 'sentiment', 'emotion']]
     
 
 def daterange(start_date, end_date):
