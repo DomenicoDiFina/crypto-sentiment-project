@@ -64,7 +64,6 @@ def get_tweets(topic, start_date, end_date, limit):
         c.Search = topic
         c.Limit = limit
         c.Since = date_range[index].strftime("%Y-%m-%d")  
-        print('since: ', c.Since)
         c.Until = date_range[index+1].strftime("%Y-%m-%d")
         c.Verified = True # True se vogliamo i verificati, False altrimenti
         c.Output = f"./tweets.csv"
@@ -90,7 +89,7 @@ def get_tweets(topic, start_date, end_date, limit):
 
     os.remove('tweets.csv')
 
-    return df.loc[:,['date', 'time', 'tweet', 'language', 'processed_tweet', 'sentiment', 'emotion']]
+    return df.loc[:,['date', 'time', 'tweet', 'language', 'processed_tweet', 'sentiment', 'emotion']], c.Since, c.Until
     
 
 def daterange(start_date, end_date):
