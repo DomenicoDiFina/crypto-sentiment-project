@@ -20,6 +20,7 @@ from keras.preprocessing.sequence import pad_sequences
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import ListedColormap, BoundaryNorm
+from pytz import timezone
 
 crypto = ['bitcoin BTC', 'ethereum ETH', 'Ripple XRP', 'Binance Coin BNB', 'Tether USDT', 'Cardano ADA', 'Dogecoin DOGE', 'Polkadot DOT', 'Internet Computer ICP', 'XRP', 'Uniswap UNI', 'Polygon MATIC', 'Stellar XLM', 'Litecoin LTC', 'VeChain VET', 'Solana SOL', 'SHIBA INU SHIB']
 crypto = [c.lower() for c in crypto]
@@ -41,10 +42,16 @@ emotions_dict = {
     'sad' : 3
 }
 
+timezone = timezone('Europe/Rome')
+
 
 def get_tweets(topic, start_date, end_date, limit):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
     end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
+
+
+    start_date.astimezone(timezone)
+    end_date.astimezone(timezone)
 
 
     date_range = list(daterange(start_date, end_date))

@@ -8,6 +8,7 @@ from get_tweets import get_topics, get_tweets, get_sentiment, get_emotion, creat
 from tqdm import tqdm
 import time
 
+
 start = date.today() - timedelta(days=1)
 end = date.today()
 
