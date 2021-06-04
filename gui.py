@@ -47,6 +47,7 @@ if st.sidebar.button("Visualizza"):
     #NEW VERSION
     emotion_list = [(tweet['date'], get_emotion(tweet['processed_tweet'])) for _,tweet in df.iterrows() if crypto_name.lower() in get_topics(tweet['processed_tweet'])]
     sentiment_list = [(tweet['date'], get_sentiment(tweet['processed_tweet'])) for _,tweet in df.iterrows() if crypto_name.lower() in get_topics(tweet['processed_tweet'])]
+    print('s_list: ', sentiment_list)
 
 
 

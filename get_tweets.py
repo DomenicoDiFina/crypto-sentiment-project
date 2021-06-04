@@ -81,8 +81,6 @@ def get_tweets(topic, start_date, end_date, limit):
 
     os.remove('tweets.csv')
 
-    print(df)
-
     return df.loc[:,['date', 'time', 'tweet', 'language', 'processed_tweet', 'sentiment', 'emotion']]
     
 
@@ -137,7 +135,7 @@ def create_emotion_plot(emotion_list):
     start_date = date_list[0]
     end_date = date_list[-1] + timedelta(days=1)
 
-    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
+    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
     """
     0: happiness
     1: love
@@ -162,8 +160,8 @@ def create_emotion_plot(emotion_list):
     fig, ax = plt.subplots()
     fig.patch.set_alpha(0)
 
-    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
-    fig.suptitle(f'Emotions Counter dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
+    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
+    fig.suptitle(f'Emotions Counter dal {start_date.strftime("%d-%m-%Y")} al {(end_date - timedelta(days=1)).strftime("%d-%m-%Y")}')
     ax.bar(x, y["happiness"], label='happy', color='#003f5c')
     ax.bar(x, y["love"], bottom=y["happiness"], label='love', color='#58508d')
     ax.bar(x, y["neutral"], bottom=y["love"]+y["happiness"],label='neutral', color='#bc5090')
@@ -181,7 +179,7 @@ def create_sentiment_plot(sentiment_list):
     start_date = date_list[0]
     end_date = date_list[-1] + timedelta(days=1)
 
-    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
+    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
     y = list()
     for day in x:
         y.append(0)
@@ -189,7 +187,7 @@ def create_sentiment_plot(sentiment_list):
             if sentiment[0] == day:
                 y[-1] += sentiment[1]
 
-    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
+    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
    
     #plotting   
     plt.style.use('dark_background')
@@ -203,7 +201,7 @@ def create_sentiment_plot(sentiment_list):
     ax.set_ylim(ymin=-yabs_max, ymax=yabs_max)
     plt.xticks(rotation=90)
 
-    fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
+    fig.suptitle(f'Sentiment dal {start_date.strftime("%d-%m-%Y")} al {(end_date - timedelta(days=1)).strftime("%d-%m-%Y")}')
 
     return fig
 
@@ -214,7 +212,7 @@ def create_combined_plot(sentiment_list, emotion_list):
     start_date = date_list[0]
     end_date = date_list[-1] + timedelta(days=1)
 
-    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
+    x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
     y = list()
     for day in x:
         y.append(0)
@@ -223,7 +221,7 @@ def create_combined_plot(sentiment_list, emotion_list):
                 y[-1] += sentiment[1] * emotions_dict[emotion_list[index][1]]
 
 
-    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date + timedelta(days=1)))]
+    x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
    
     #plotting   
     plt.style.use('dark_background')
@@ -237,7 +235,7 @@ def create_combined_plot(sentiment_list, emotion_list):
     plt.xticks(rotation=90)
 
 
-    fig.suptitle(f'Sentiment e Emozioni Combinate dal {start_date.strftime("%d-%m-%Y")} al {end_date.strftime("%d-%m-%Y")}')
+    fig.suptitle(f'Sentiment e Emozioni Combinate dal {start_date.strftime("%d-%m-%Y")} al {(end_date - timedelta(days=1)).strftime("%d-%m-%Y")}')
 
     return fig
 
