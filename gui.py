@@ -44,6 +44,7 @@ if st.sidebar.button("Visualizza"):
     progress_bar.progress(0.5)
     progress_count = 0.5
 
+    st.write(df)
     #NEW VERSION
     emotion_list = [(tweet['date'], get_emotion(tweet['processed_tweet'])) for _,tweet in df.iterrows() if crypto_name.lower() in get_topics(tweet['processed_tweet'])]
     sentiment_list = [(tweet['date'], get_sentiment(tweet['processed_tweet'])) for _,tweet in df.iterrows() if crypto_name.lower() in get_topics(tweet['processed_tweet'])]
