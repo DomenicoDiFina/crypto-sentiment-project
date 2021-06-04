@@ -41,8 +41,6 @@ emotions_dict = {
     'sad' : 3
 }
 
-date_range = []
-
 
 def get_tweets(topic, start_date, end_date, limit):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
@@ -85,10 +83,8 @@ def get_tweets(topic, start_date, end_date, limit):
 
     os.remove('tweets.csv')
 
-    return df.loc[:,['date', 'time', 'tweet', 'language', 'processed_tweet', 'sentiment', 'emotion']], date_range
+    return df.loc[:,['date', 'time', 'tweet', 'language', 'processed_tweet', 'sentiment', 'emotion']]
     
-def get_daterange():
-    return date_range
 
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
