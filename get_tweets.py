@@ -64,7 +64,7 @@ def get_tweets(topic, start_date, end_date, limit):
         c.Search = topic
         c.Limit = limit
         c.Since = date_range[index].strftime("%Y-%m-%d")  
-        c.Until = date_range[index+1].strftime("%Y-%m-%d")
+        c.Until = date_range[index+1].strftime("%Y-%m-%d") + " 06:00:00"
         c.Verified = True # True se vogliamo i verificati, False altrimenti
         c.Output = f"./tweets.csv"
         c.Store_csv = True
