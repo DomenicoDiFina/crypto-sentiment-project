@@ -79,7 +79,7 @@ def get_tweets(topic, start_date, end_date, limit):
     
     df["emotion"] = ''
 
-    os.remove('tweets.csv')
+    #os.remove('tweets.csv')
 
     return df.loc[:,['date', 'time', 'tweet', 'language', 'processed_tweet', 'sentiment', 'emotion']]
     
