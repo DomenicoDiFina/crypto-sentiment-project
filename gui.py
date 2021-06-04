@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 #import mplfinance as mpf
 import datetime as dt
 from datetime import date, timedelta
-from get_tweets import get_topics, get_tweets, get_sentiment, get_emotion, create_plots
+from get_tweets import get_topics, get_tweets, get_sentiment, get_emotion, create_plots, get_daterange
 from tqdm import tqdm
 import time
 
@@ -39,8 +39,10 @@ if st.sidebar.button("Visualizza"):
     st.title(f"Grafico riguardante {crypto_name} dal {date_start} al {date_end}.")
     print('Recupero tweet in corso...')
     progress_bar = st.progress(0.2)
-    df = get_tweets('crypto', str(date_start), str(date_end), limit_tweets)
+    df, date_range = get_tweets('crypto', str(date_start), str(date_end), limit_tweets)
     print('Recupero tweet avvenuto')
+    x = [x.strftime("%Y-%m-%d") for x in date_range]
+    st.write(x)
     progress_bar.progress(0.5)
     progress_count = 0.5
 

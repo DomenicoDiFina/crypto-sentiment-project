@@ -41,6 +41,8 @@ emotions_dict = {
     'sad' : 3
 }
 
+date_range = []
+
 
 def get_tweets(topic, start_date, end_date, limit):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
@@ -50,7 +52,9 @@ def get_tweets(topic, start_date, end_date, limit):
     date_range = list(daterange(start_date, end_date))
 
 
-    for index in range(len(date_range)-1):
+
+
+    for index in range(0,len(date_range)-1):
         c = twint.Config()
         c.Search = topic
         c.Limit = limit
@@ -81,9 +85,10 @@ def get_tweets(topic, start_date, end_date, limit):
 
     os.remove('tweets.csv')
 
-    return df.loc[:,['date', 'time', 'tweet', 'language', 'processed_tweet', 'sentiment', 'emotion']]
+    return df.loc[:,['date', 'time', 'tweet', 'language', 'processed_tweet', 'sentiment', 'emotion']], date_range
     
-
+def get_daterange():
+    return date_range
 
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
