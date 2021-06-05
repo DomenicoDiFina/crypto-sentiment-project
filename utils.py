@@ -1,24 +1,17 @@
-from json import load
-from numpy.ma.core import masked_where
 import twint
 import pandas as pd
 from datetime import datetime
-from datetime import date, timedelta
+from datetime import timedelta
 import os
 from pre_processing import pre_processing
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from scipy import spatial
 import numpy as np
 from keras.models import load_model
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, LSTM, Embedding, SpatialDropout1D
 import pickle
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import matplotlib.pyplot as plt
-from matplotlib.collections import LineCollection
-from matplotlib.colors import ListedColormap, BoundaryNorm
 
 # list of crypto
 crypto = ['bitcoin BTC', 'ethereum ETH', 'Ripple XRP', 'Binance Coin BNB', 'Tether USDT', 'Cardano ADA', 'Dogecoin DOGE', 'Polkadot DOT', 'Internet Computer ICP', 'XRP', 'Uniswap UNI', 'Polygon MATIC', 'Stellar XLM', 'Litecoin LTC', 'VeChain VET', 'Solana SOL', 'SHIBA INU SHIB']
