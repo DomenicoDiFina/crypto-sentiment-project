@@ -16,24 +16,31 @@ from tensorflow.keras.layers import Dense, LSTM, Embedding, SpatialDropout1D
 import pickle
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
-
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import ListedColormap, BoundaryNorm
 
-
+# list of crypto
 crypto = ['bitcoin BTC', 'ethereum ETH', 'Ripple XRP', 'Binance Coin BNB', 'Tether USDT', 'Cardano ADA', 'Dogecoin DOGE', 'Polkadot DOT', 'Internet Computer ICP', 'XRP', 'Uniswap UNI', 'Polygon MATIC', 'Stellar XLM', 'Litecoin LTC', 'VeChain VET', 'Solana SOL', 'SHIBA INU SHIB']
 crypto = [c.lower() for c in crypto]
+
+# tf-idf vectorizer used to create a numeric vector for every crypto
 tf_idf_vectorizer = TfidfVectorizer()
 crypto_vectorized = tf_idf_vectorizer.fit_transform(crypto)
 
+# load the sentiment model created using a neural network with a lstm layer
 model_sentiment = load_model('model_lstm_epoch_1.h5')
+
+# load the tokenizer for the sentiments
 tokenizer_sentiment = pickle.load(open("tokenizer.pickle", "rb"))
 
+# load the emotion model created using a neural network with a lstm layer
 model_emotion = load_model("emotions_model_lstm")
+
+# load the tokenizer for the emotions
 tokenizer_emotion = pickle.load(open("emotion_detection/tokenizer_emotion.pickle", "rb"))
 
-
+# weights for every emotion
 emotions_dict = {
     'neutral' : 1,
     'happiness' : 2,
@@ -43,31 +50,21 @@ emotions_dict = {
 }
 
 
-
+# retrieve {limit} tweets per day from {start_date} to {end_date} about a particular {topic}
 def get_tweets(topic, start_date, end_date, limit):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
     end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
 
-
-
     date_range = list(daterange(start_date, end_date))
 
-    print()
-    print()
-    print(date_range)
-    print()
-    print()
-
-
-
-
+    # twint library used to retrieve tweets per day (we consider only verified accounts)
     for index in range(len(date_range)):
         c = twint.Config()
         c.Search = topic
         c.Limit = limit
         c.Since = date_range[index].strftime("%Y-%m-%d") + " 00:00:00"
         c.Until = date_range[index].strftime("%Y-%m-%d") + " 21:59:59"
-        c.Verified = True # True se vogliamo i verificati, False altrimenti
+        c.Verified = True 
         c.Output = f"./tweets.csv"
         c.Store_csv = True
         c.Hide_output = True
@@ -76,19 +73,20 @@ def get_tweets(topic, start_date, end_date, limit):
 
     df = pd.read_csv('tweets.csv')
 
-    
-
+    # check if the language of the tweet is english
     df = df[df['language'] == 'en']
 
+    # preprocessing
     df['processed_tweet'] = pre_processing(list(df['tweet']))
 
-
+    # convert into a string every row tokenized tweet
     df["processed_tweet"] = df['processed_tweet'].apply(lambda x: ' '.join(map(str,x)))
 
     df["sentiment"] = ''
     
     df["emotion"] = ''
 
+    # delete the csv file
     os.remove('tweets.csv')
 
     return df.loc[:,['date', 'time', 'tweet', 'language', 'processed_tweet', 'sentiment', 'emotion']]
@@ -99,7 +97,7 @@ def daterange(start_date, end_date):
         yield start_date + timedelta(n)
     
 
-
+# using the neural network model to predict the sentiment of a tweet
 def get_sentiment(tweet): 
     pred = model_sentiment.predict(pad_sequences(tokenizer_sentiment.texts_to_sequences(tweet), maxlen=48, dtype='int32', value=0))[0]
     if(np.argmax(pred) == 0):
@@ -107,10 +105,7 @@ def get_sentiment(tweet):
     elif (np.argmax(pred) == 1):
         return 1
 
-
-"""
-UPDATE WITH NEW RAPPRESENTATION BASED ON NEW EMOTIONS MODEL
-"""
+# using the neural network model to predict the predominant emotion in a tweet
 def get_emotion(tweet):
     pred = model_emotion.predict(pad_sequences(tokenizer_emotion.texts_to_sequences(tweet), maxlen=30, dtype='int32', value=0))[0]
     if(np.argmax(pred) == 0):
@@ -125,7 +120,7 @@ def get_emotion(tweet):
         return "worry"
 
 
-
+# return the list of topics in a tweet
 def get_topics(tweet):
     tweet_vectorized = tf_idf_vectorizer.transform([tweet])    
     cosine_sim = cosine_similarity(crypto_vectorized, tweet_vectorized)
@@ -136,7 +131,6 @@ def get_topics(tweet):
         return ''
 
 
-
 def create_emotion_plot(emotion_list):
 
     date_list = sorted(list(set([datetime.strptime(day[0], '%Y-%m-%d') for day in emotion_list])))
@@ -145,13 +139,6 @@ def create_emotion_plot(emotion_list):
     end_date = date_list[-1] + timedelta(days=1)
 
     x = [x.strftime("%Y-%m-%d") for x in list(daterange(start_date, end_date))]
-    """
-    0: happiness
-    1: love
-    2: neutral
-    3: sad
-    4: worry
-    """
     y = {}
     y["happiness"] = np.zeros(len(x))
     y["love"] = np.zeros(len(x))
@@ -198,7 +185,6 @@ def create_sentiment_plot(sentiment_list):
 
     x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
    
-    #plotting   
     plt.style.use('dark_background')
     fig = plt.figure()
     fig.patch.set_alpha(0)
@@ -232,7 +218,6 @@ def create_combined_plot(sentiment_list, emotion_list):
 
     x = [x.strftime("%d-%m") for x in list(daterange(start_date, end_date))]
    
-    #plotting   
     plt.style.use('dark_background')
     fig = plt.figure()
     fig.patch.set_alpha(0)

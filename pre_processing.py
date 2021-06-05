@@ -4,7 +4,6 @@ from nltk.corpus import stopwords
 from nltk.stem.lancaster import LancasterStemmer
 import pickle
 from langdetect import detect
-#import snoop
 from tqdm import tqdm
 import nltk
 
@@ -243,11 +242,6 @@ def pre_processing(tweets):
         "zzz" : "sleeping bored and tired"
     }
 
-
-    # Change all the text to lower case. This is required as python interprets 'dog' and 'DOG' differently
-    #print(tweets)
-    #tweets = [tweet for tweet in tweets if detect(tweet) == 'en']
-
     urlPattern = r"((http://)[^ ]*|(https://)[^ ]*|( www\.)[^ ]*)"
     userPattern = '@[^\s]+'
 
@@ -269,6 +263,7 @@ def pre_processing(tweets):
 
     result = list()
 
+    # replace abbreviations
     for tweet in tqdm(tweets, desc="word tokenize process"):
         for word in word_tokenize(tweet):
             if word in abbreviations.keys():
@@ -277,8 +272,6 @@ def pre_processing(tweets):
         result.append(tweet)
 
     tweets = result
-
-    #tweets=[re.sub(word, abbreviations[word], tweet) for tweet in tweets for word in word_tokenize(tweet) if word in abbreviations.keys()]
 
 
     # tokenization : In this each entry will be broken into set of words
@@ -305,7 +298,6 @@ def stop_words(tweet):
 
 
 def process_tweet(tweet):
-  # Lower Casing
     tweet = re.sub(r"there's", "there is", tweet)
     tweet = re.sub(r"we're", "we are", tweet)
     tweet = re.sub(r"won't", "will not", tweet)
@@ -374,23 +366,3 @@ def process_tweet(tweet):
 
 #     return tweets_tokenized
 
-# def convert_tweets(tweets):
-#     converted_tweets = list()
-#     for i in range(len(tweets)):
-#         unified_string = ''
-        
-#         for word in tweets[i][:-1]:
-#             if word.isalpha():
-#                 unified_string += word + ','
-
-#         if tweets[i][-1].isalpha():
-#                 unified_string += tweets[i][-1]     
-
-#         converted_tweets.append(unified_string)
-
-#     return converted_tweets
-
-
-if __name__ == '__main__':
-    result = pre_processing(["don't do that, call me asap, 5$ https://ciao.com", "the film was good"])
-    print(result)
