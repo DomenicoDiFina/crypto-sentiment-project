@@ -32,13 +32,13 @@ crypto_vectorized = tf_idf_vectorizer.fit_transform(crypto)
 model_sentiment = load_model('model_lstm_epoch_1.h5')
 
 # load the tokenizer for the sentiments
-tokenizer_sentiment = pickle.load(open("tokenizer.pickle", "rb"))
+tokenizer_sentiment = pickle.load(open("tokenizer_sentiment.pickle", "rb"))
 
 # load the emotion model created using a neural network with a lstm layer
 model_emotion = load_model("emotions_model_lstm")
 
 # load the tokenizer for the emotions
-tokenizer_emotion = pickle.load(open("emotion_detection/tokenizer_emotion.pickle", "rb"))
+tokenizer_emotion = pickle.load(open("tokenizer_emotion.pickle", "rb"))
 
 # weights for every emotion
 emotions_dict = {
