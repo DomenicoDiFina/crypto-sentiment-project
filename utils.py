@@ -22,7 +22,7 @@ tf_idf_vectorizer = TfidfVectorizer()
 crypto_vectorized = tf_idf_vectorizer.fit_transform(crypto)
 
 # load the sentiment model created using a neural network with a lstm layer
-model_sentiment = load_model('model_lstm_epoch_1.h5')
+model_sentiment = load_model('sentiment_model_lstm')
 
 # load the tokenizer for the sentiments
 tokenizer_sentiment = pickle.load(open("tokenizer_sentiment.pickle", "rb"))
