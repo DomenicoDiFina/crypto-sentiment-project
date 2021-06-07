@@ -35,7 +35,7 @@ tokenizer_emotion = pickle.load(open("tokenizer_emotion.pickle", "rb"))
 
 # weights for every emotion
 emotions_dict = {
-    'neutral' : 1,
+    'neutral' : 0,
     'happiness' : 2,
     'love' : 3,
     'worry' : 2,
